@@ -20,8 +20,53 @@ model User {
   address   String
   profileImg  String
 }
+//----category
+model Category{
+  id        String    @id @default(uuid())
+  title     String
+}
+//-----book
+model Book{
+  id        String    @id @default(uuid())
+  title String
+  author String
+  price Float
+  genre String
+  publicationDate DateTime
+  categoryId String
+}
+//-----ReviewAndRating
+model ReviewAndRating{
+  id        String    @id @default(uuid())
+  review String
+  rating String
+  userId String
+  bookId String
 
+}
+//-----Order
+model Order{
+  id        String    @id @default(uuid())
+  status    ORDER_STATUS @default(pending)
+  createdAt DateTime @default(now())
+  userId String
+
+}
+//-----OrderedBook
+model OrderedBook{
+  id        String    @id @default(uuid())
+  orderId String
+  bookId String
+  quantity Int
+
+}
+////------enums
 enum USER_ROLE {
   admin
   customer
+}
+enum ORDER_STATUS {
+  pending
+  shipped
+  delivered
 }
