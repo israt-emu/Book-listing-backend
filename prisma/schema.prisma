@@ -9,62 +9,79 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 //-----user
 model User {
-  id        String    @id @default(uuid())
-  name      String    
-  email     String    @unique
-  password  String
-  role      USER_ROLE? @default(customer)
-  contactNo String
-  address   String
-  profileImg  String
+  id               String            @id @default(uuid())
+  name             String
+  email            String            @unique
+  password         String
+  role             USER_ROLE?        @default(customer)
+  contactNo        String
+  address          String
+  profileImg       String
+  reviewAndRatings ReviewAndRating[]
+  orders           Order[]
 }
+
 //----category
-model Category{
-  id        String    @id @default(uuid())
-  title     String
-}
-//-----book
-model Book{
-  id        String    @id @default(uuid())
+model Category {
+  id    String @id @default(uuid())
   title String
-  author String
-  price Float
-  genre String
-  publicationDate DateTime
-  categoryId String
+  books Book[]
 }
+
+//-----book
+model Book {
+  id               String            @id @default(uuid())
+  title            String
+  author           String
+  price            Float
+  genre            String
+  publicationDate  DateTime
+  categoryId       String
+  category         Category          @relation(fields: [categoryId], references: [id])
+  reviewAndRatings ReviewAndRating[]
+  orderedBooks     OrderedBook[]
+}
+
 //-----ReviewAndRating
-model ReviewAndRating{
-  id        String    @id @default(uuid())
+model ReviewAndRating {
+  id     String @id @default(uuid())
   review String
   rating String
   userId String
   bookId String
-
+  book   Book   @relation(fields: [bookId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 }
+
 //-----Order
-model Order{
-  id        String    @id @default(uuid())
-  status    ORDER_STATUS @default(pending)
-  createdAt DateTime @default(now())
-  userId String
-
+model Order {
+  id          String        @id @default(uuid())
+  status      ORDER_STATUS  @default(pending)
+  createdAt   DateTime      @default(now())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  orderedBooks OrderedBook[]
 }
+
 //-----OrderedBook
-model OrderedBook{
-  id        String    @id @default(uuid())
-  orderId String
-  bookId String
+model OrderedBook {
+  id       String @id @default(uuid())
+  orderId  String
+  bookId   String
   quantity Int
-
+  book     Book   @relation(fields: [bookId], references: [id])
+  order    Order  @relation(fields: [orderId], references: [id])
 }
+
 ////------enums
 enum USER_ROLE {
   admin
   customer
 }
+
 enum ORDER_STATUS {
   pending
   shipped
