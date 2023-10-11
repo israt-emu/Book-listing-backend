@@ -23,7 +23,7 @@ export const loginUser = catchAsync(async (req: Request, res: Response) => {
   //
   const data = req?.body;
   const result = await loginUserService(data);
-  const {refreshToken, ...others} = result;
+  const {refreshToken, accessToken} = result;
   //set refresh token into cookie
   const cookieOptions = {
     secure: config.env === "production",
@@ -31,11 +31,11 @@ export const loginUser = catchAsync(async (req: Request, res: Response) => {
   };
 
   res.cookie("refreshToken", refreshToken, cookieOptions);
-  sendResponse<ILoginResponse>(res, {
-    statusCode: httpStatus.OK,
+  res.status(httpStatus.OK).json({
+    statusCode: 200,
     success: true,
     message: "User logged in successfully!",
-    data: others,
+    token: accessToken,
   });
 });
 
