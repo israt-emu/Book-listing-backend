@@ -23,6 +23,9 @@ exports.createBookZodSchema = zod_1.z.object({
         categoryId: zod_1.z.string().nonempty({
             message: "Category Id is required",
         }),
+        genre: zod_1.z.string().nonempty({
+            message: "genre is required",
+        }),
     })
         .strict(),
 });
@@ -38,6 +41,7 @@ exports.updateCategoryZodSchema = zod_1.z.object({
         author: zod_1.z.string().optional(),
         price: zod_1.z.number().optional(),
         publicationDate: zod_1.z.string().optional(),
+        genre: zod_1.z.string().optional(),
         categoryId: zod_1.z.string().nonempty().optional(),
     })
         .strict(),

@@ -21,6 +21,9 @@ export const createBookZodSchema = z.object({
       categoryId: z.string().nonempty({
         message: "Category Id is required",
       }),
+      genre: z.string().nonempty({
+        message: "genre is required",
+      }),
     })
     .strict(),
 });
@@ -37,6 +40,7 @@ export const updateCategoryZodSchema = z.object({
       author: z.string().optional(),
       price: z.number().optional(),
       publicationDate: z.string().optional(),
+      genre: z.string().optional(),
       categoryId: z.string().nonempty().optional(),
     })
     .strict(),
